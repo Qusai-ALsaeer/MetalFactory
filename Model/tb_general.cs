@@ -20,10 +20,9 @@ namespace Acco.Model
 
         public int? id_cur { get; set; }
 
-        public int mo_num { get; set; }
-
-        [StringLength(10)]
-        public string ser_num { get; set; }
+        public int? mother_num { get; set; }
+        public int? motion_num { get; set; }
+        public int? gen_num { get; set; }
 
         public int? account { get; set; }
 

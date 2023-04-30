@@ -17,6 +17,7 @@ namespace Acco
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+            Model1 model = new Model1();
             Application.Run(new  Start());
         }
     }

@@ -7,6 +7,10 @@ namespace Acco.Model
 {
     public partial class Model1 : DbContext
     {
+        public Model1(string connectionString) : base(connectionString)
+        {
+        }
+
         public Model1()
             : base("name=Model1")
         {

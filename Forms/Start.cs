@@ -22,6 +22,11 @@ namespace Acco.Model
 
         private void Start_Load(object sender, EventArgs e)
         {
+            // تعيين خاصية Anchor لعنصر PictureBox ليتغير حجمه مع تغيير حجم النافذة
+            pictureBox1.Anchor = (AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Bottom | AnchorStyles.Right);
+
+            // تعيين خاصية SizeMode لعنصر PictureBox لتمدد الصورة مع تغيير حجم PictureBox
+            pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
 
             S_Label_date.Text = "    " + DateTime.Now.ToString("yyyy-MM-dd") + "    |    " + DateTime.Now.ToString("hh:mm:ss") + "    |    " + DateTime.Now.ToString("MMMM") + "  -  " + DateTime.Now.ToString("dddd ");
             S_Label_prog.Text = "                          ||                                 " + "برنامج الساير لمحاسبة معامل الحديد";
@@ -72,6 +77,49 @@ namespace Acco.Model
         private void جدولنوعالعملToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Form form = new Jop();
+            form.Owner = this;
+            form.Show();
+        }
+
+        private void جدولالوحداتToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Form form = new Unit ();
+            form.Owner = this;
+            form.Show();
+
+        }
+
+        private void S_Item_Click(object sender, EventArgs e)
+        {
+            Form form = new Item ();
+            form.Owner = this;
+            form.Show();
+        }
+
+        private void جدولالافرانToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Form form = new Faran();
+            form.Owner = this;
+            form.Show();
+        }
+
+        private void اتصالToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Form form = new Connection();
+            form.Owner = this;
+            form.Show();
+        }
+
+        private void S_Motions_Click(object sender, EventArgs e)
+        {
+            Form form = new Motion();
+            form.Owner = this;
+            form.Show();
+        }
+
+        private void S_Payment_Click(object sender, EventArgs e)
+        {
+            Form form = new Payment();
             form.Owner = this;
             form.Show();
         }

@@ -62,10 +62,6 @@ namespace Acco.Forms
             return maxID + 1;
         }
 
-        private void C_btn_Click(object sender, EventArgs e)
-        {
-            this.Close();
-        }
 
         private void N_btn_Click(object sender, EventArgs e)
         {
@@ -165,6 +161,10 @@ namespace Acco.Forms
             tb_currencyBindingSource.DataSource = dbContext.tb_currency.ToList();
             gridControl1.DataSource = tb_currencyBindingSource;
 
+        }
+        private void C_btn_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }

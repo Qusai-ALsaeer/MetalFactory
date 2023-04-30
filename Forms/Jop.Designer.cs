@@ -251,8 +251,10 @@
             this.Controls.Add(this.N_btn);
             this.Controls.Add(this.groupControl2);
             this.Controls.Add(this.groupControl1);
+            this.IconOptions.LargeImage = global::Acco.Properties.Resources.boemployee_32x32;
             this.Name = "Jop";
-            this.Text = "Jop";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "جدول نوع العمل";
             this.Load += new System.EventHandler(this.Jop_Load);
             ((System.ComponentModel.ISupportInitialize)(this.groupControl1)).EndInit();
             this.groupControl1.ResumeLayout(false);

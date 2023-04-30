@@ -28,6 +28,21 @@ namespace Acco.Forms
         private void Jop_Load(object sender, EventArgs e)
         {
             RefreshData();
+            gridView1.RowCellStyle += GridView1_RowCellStyle;
+
+        }
+        private void GridView1_RowCellStyle(object sender, DevExpress.XtraGrid.Views.Grid.RowCellStyleEventArgs e)
+        {
+            // تحديد لون الخلفية للصفوف الفردية
+            if (e.RowHandle % 2 == 1)
+            {
+                e.Appearance.BackColor = Color.LightGray;
+            }
+            // تحديد لون الخلفية للصفوف الزوجية
+            else
+            {
+                e.Appearance.BackColor = Color.White;
+            }
         }
         private void RefreshData()
         {
@@ -42,7 +57,6 @@ namespace Acco.Forms
             }
             return maxID + 1;
         }
-
         private void N_btn_Click(object sender, EventArgs e)
         {
             N_btn.Enabled = false;
@@ -57,7 +71,6 @@ namespace Acco.Forms
             tb_jopBindingSource.DataSource = JobData;
             gridControl1.DataSource = dbContext.tb_jop.ToList();
         }
-
         private void S_btn_Click(object sender, EventArgs e)
         {
             if (txt_id.EditValue == null || txt_id.EditValue == DBNull.Value)
@@ -118,7 +131,6 @@ namespace Acco.Forms
             }
           
         }
-
         private void D_btn_Click(object sender, EventArgs e)
         {
             var _id = Convert.ToInt32(txt_id.EditValue);
@@ -150,7 +162,6 @@ namespace Acco.Forms
             gridControl1.DataSource = dbContext.tb_jop.ToList();
 
         }
-
         private void C_btn_Click(object sender, EventArgs e)
         {
             this.Close();   

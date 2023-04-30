@@ -41,6 +41,7 @@
     <Reference Include="DevExpress.Drawing.v22.2, Version=22.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
     <Reference Include="DevExpress.Printing.v22.2.Core, Version=22.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="DevExpress.Utils.v22.2, Version=22.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.Xpo.v22.2, Version=22.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="DevExpress.XtraBars.v22.2, Version=22.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="DevExpress.XtraEditors.v22.2, Version=22.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="DevExpress.XtraGrid.v22.2, Version=22.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
@@ -58,6 +59,9 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Services" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -69,6 +73,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConnectionManager.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -93,11 +98,23 @@
     <Compile Include="Forms\Catgory.Designer.cs">
       <DependentUpon>Catgory.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\Connection.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Connection.Designer.cs">
+      <DependentUpon>Connection.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Currncy.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\Currncy.Designer.cs">
       <DependentUpon>Currncy.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Faran.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Faran.Designer.cs">
+      <DependentUpon>Faran.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\Final_Acco.cs">
       <SubType>Form</SubType>
@@ -105,11 +122,29 @@
     <Compile Include="Forms\Final_Acco.Designer.cs">
       <DependentUpon>Final_Acco.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\Item.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Item.Designer.cs">
+      <DependentUpon>Item.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Jop.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\Jop.Designer.cs">
       <DependentUpon>Jop.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Motion.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Motion.Designer.cs">
+      <DependentUpon>Motion.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Payment.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Payment.Designer.cs">
+      <DependentUpon>Payment.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\Start.cs">
       <SubType>Form</SubType>
@@ -117,6 +152,21 @@
     <Compile Include="Forms\Start.Designer.cs">
       <DependentUpon>Start.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\Unit.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Unit.Designer.cs">
+      <DependentUpon>Unit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202304152029385_faranAccount.cs" />
+    <Compile Include="Migrations\202304152029385_faranAccount.designer.cs">
+      <DependentUpon>202304152029385_faranAccount.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202304272125084_InitialUpdate.cs" />
+    <Compile Include="Migrations\202304272125084_InitialUpdate.designer.cs">
+      <DependentUpon>202304272125084_InitialUpdate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\Model1.cs" />
     <Compile Include="Model\sysdiagram.cs" />
     <Compile Include="Model\tb_account.cs" />
@@ -159,17 +209,41 @@
     <EmbeddedResource Include="Forms\Catgory.resx">
       <DependentUpon>Catgory.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Connection.resx">
+      <DependentUpon>Connection.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\Currncy.resx">
       <DependentUpon>Currncy.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Faran.resx">
+      <DependentUpon>Faran.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Final_Acco.resx">
       <DependentUpon>Final_Acco.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Item.resx">
+      <DependentUpon>Item.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\Jop.resx">
       <DependentUpon>Jop.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Motion.resx">
+      <DependentUpon>Motion.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Payment.resx">
+      <DependentUpon>Payment.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\Start.resx">
       <DependentUpon>Start.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Unit.resx">
+      <DependentUpon>Unit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202304152029385_faranAccount.resx">
+      <DependentUpon>202304152029385_faranAccount.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202304272125084_InitialUpdate.resx">
+      <DependentUpon>202304272125084_InitialUpdate.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\licenses.licx" />
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -207,6 +281,42 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\boproduct_32x32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\boemployee_32x32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\14.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\currency2_32x32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bo_product_group.svg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\boproductgroup_32x32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bosaleitem_32x32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\pictureshapefillcolor_32x32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\forcetesting_32x32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bottomup_32x32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\previous_32x32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\open_32x32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\open_16x16.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

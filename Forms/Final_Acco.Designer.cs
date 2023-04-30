@@ -74,7 +74,7 @@
             // groupControl1
             // 
             this.groupControl1.Controls.Add(this.dataLayoutControl1);
-            this.groupControl1.Location = new System.Drawing.Point(400, 12);
+            this.groupControl1.Location = new System.Drawing.Point(316, 12);
             this.groupControl1.Name = "groupControl1";
             this.groupControl1.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.groupControl1.Size = new System.Drawing.Size(235, 292);
@@ -198,7 +198,7 @@
             this.groupControl2.Location = new System.Drawing.Point(12, 12);
             this.groupControl2.Name = "groupControl2";
             this.groupControl2.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.groupControl2.Size = new System.Drawing.Size(382, 292);
+            this.groupControl2.Size = new System.Drawing.Size(298, 292);
             this.groupControl2.TabIndex = 1;
             this.groupControl2.Text = "جدول الحسابات الختامية";
             // 
@@ -209,7 +209,7 @@
             this.gridControl1.Location = new System.Drawing.Point(2, 23);
             this.gridControl1.MainView = this.gridView1;
             this.gridControl1.Name = "gridControl1";
-            this.gridControl1.Size = new System.Drawing.Size(378, 267);
+            this.gridControl1.Size = new System.Drawing.Size(294, 267);
             this.gridControl1.TabIndex = 0;
             this.gridControl1.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
             this.gridView1});
@@ -231,7 +231,7 @@
             this.colid_fin.Name = "colid_fin";
             this.colid_fin.Visible = true;
             this.colid_fin.VisibleIndex = 0;
-            this.colid_fin.Width = 40;
+            this.colid_fin.Width = 30;
             // 
             // colf_num
             // 
@@ -240,7 +240,7 @@
             this.colf_num.Name = "colf_num";
             this.colf_num.Visible = true;
             this.colf_num.VisibleIndex = 1;
-            this.colf_num.Width = 66;
+            this.colf_num.Width = 58;
             // 
             // colf_name
             // 
@@ -249,7 +249,7 @@
             this.colf_name.Name = "colf_name";
             this.colf_name.Visible = true;
             this.colf_name.VisibleIndex = 2;
-            this.colf_name.Width = 249;
+            this.colf_name.Width = 183;
             // 
             // C_btn
             // 
@@ -291,7 +291,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(647, 353);
+            this.ClientSize = new System.Drawing.Size(562, 353);
             this.Controls.Add(this.C_btn);
             this.Controls.Add(this.D_btn);
             this.Controls.Add(this.S_btn);
@@ -299,7 +299,7 @@
             this.Controls.Add(this.groupControl2);
             this.Controls.Add(this.groupControl1);
             this.Name = "Final_Acco";
-            this.Text = "Final_Acco";
+            this.Text = " الحسابات الختامية";
             this.Load += new System.EventHandler(this.Final_Acco_Load);
             ((System.ComponentModel.ISupportInitialize)(this.groupControl1)).EndInit();
             this.groupControl1.ResumeLayout(false);

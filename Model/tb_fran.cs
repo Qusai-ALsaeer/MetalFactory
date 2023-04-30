@@ -13,5 +13,7 @@ namespace Acco.Model
 
         [StringLength(50)]
         public string far_name { get; set; }
+        public int id_Acco { get; set; }
+
     }
 }

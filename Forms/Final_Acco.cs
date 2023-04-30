@@ -66,7 +66,6 @@ namespace Acco.Forms
         {
             tb_finalBindingSource.DataSource = dbContext.tb_final.ToList();
         }
-
         private void N_btn_Click(object sender, EventArgs e)
         {
             N_btn.Enabled = false;
@@ -90,7 +89,6 @@ namespace Acco.Forms
             }
             return maxID + 1;
         }
-
         private void S_btn_Click(object sender, EventArgs e)
         {
             var _id = Convert.ToInt32(txt_id.EditValue);
