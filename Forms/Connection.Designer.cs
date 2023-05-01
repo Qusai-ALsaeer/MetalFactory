@@ -43,10 +43,12 @@
             this.connectButton = new DevExpress.XtraEditors.SimpleButton();
             this.simpleButton2 = new DevExpress.XtraEditors.SimpleButton();
             this.groupControl3 = new DevExpress.XtraEditors.GroupControl();
+            this.txt_newDataName = new DevExpress.XtraEditors.TextEdit();
+            this.labelControl7 = new DevExpress.XtraEditors.LabelControl();
+            this.comb_server_local = new DevExpress.XtraEditors.ComboBoxEdit();
             this.Browse_btn = new DevExpress.XtraEditors.SimpleButton();
             this.txt_cr = new DevExpress.XtraEditors.TextEdit();
             this.labelControl6 = new DevExpress.XtraEditors.LabelControl();
-            this.txt_databasename = new DevExpress.XtraEditors.TextEdit();
             this.radioBtn_openolddatabase = new System.Windows.Forms.RadioButton();
             this.labelControl5 = new DevExpress.XtraEditors.LabelControl();
             this.radioBtn_creatnewdatabase = new System.Windows.Forms.RadioButton();
@@ -60,8 +62,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.userTextBox.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.groupControl3)).BeginInit();
             this.groupControl3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.txt_newDataName.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.comb_server_local.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txt_cr.Properties)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txt_databasename.Properties)).BeginInit();
             this.SuspendLayout();
             // 
             // groupControl1
@@ -199,10 +202,12 @@
             // 
             // groupControl3
             // 
+            this.groupControl3.Controls.Add(this.txt_newDataName);
+            this.groupControl3.Controls.Add(this.labelControl7);
+            this.groupControl3.Controls.Add(this.comb_server_local);
             this.groupControl3.Controls.Add(this.Browse_btn);
             this.groupControl3.Controls.Add(this.txt_cr);
             this.groupControl3.Controls.Add(this.labelControl6);
-            this.groupControl3.Controls.Add(this.txt_databasename);
             this.groupControl3.Controls.Add(this.radioBtn_openolddatabase);
             this.groupControl3.Controls.Add(this.labelControl5);
             this.groupControl3.Controls.Add(this.radioBtn_creatnewdatabase);
@@ -213,10 +218,34 @@
             this.groupControl3.TabIndex = 7;
             this.groupControl3.Text = "انشاء قاعدة بيانات";
             // 
+            // txt_newDataName
+            // 
+            this.txt_newDataName.Location = new System.Drawing.Point(52, 75);
+            this.txt_newDataName.Name = "txt_newDataName";
+            this.txt_newDataName.Size = new System.Drawing.Size(171, 20);
+            this.txt_newDataName.TabIndex = 12;
+            // 
+            // labelControl7
+            // 
+            this.labelControl7.Location = new System.Drawing.Point(229, 81);
+            this.labelControl7.Name = "labelControl7";
+            this.labelControl7.Size = new System.Drawing.Size(58, 13);
+            this.labelControl7.TabIndex = 11;
+            this.labelControl7.Text = "اسم القاعدة";
+            // 
+            // comb_server_local
+            // 
+            this.comb_server_local.Location = new System.Drawing.Point(52, 51);
+            this.comb_server_local.Name = "comb_server_local";
+            this.comb_server_local.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
+            this.comb_server_local.Size = new System.Drawing.Size(171, 20);
+            this.comb_server_local.TabIndex = 10;
+            // 
             // Browse_btn
             // 
             this.Browse_btn.ImageOptions.Image = global::Acco.Properties.Resources.open_16x16;
-            this.Browse_btn.Location = new System.Drawing.Point(60, 50);
+            this.Browse_btn.Location = new System.Drawing.Point(6, 96);
             this.Browse_btn.Name = "Browse_btn";
             this.Browse_btn.PaintStyle = DevExpress.XtraEditors.Controls.PaintStyles.Light;
             this.Browse_btn.Size = new System.Drawing.Size(31, 23);
@@ -225,25 +254,18 @@
             // 
             // txt_cr
             // 
-            this.txt_cr.Location = new System.Drawing.Point(5, 86);
+            this.txt_cr.Location = new System.Drawing.Point(52, 98);
             this.txt_cr.Name = "txt_cr";
-            this.txt_cr.Size = new System.Drawing.Size(218, 20);
+            this.txt_cr.Size = new System.Drawing.Size(171, 20);
             this.txt_cr.TabIndex = 9;
             // 
             // labelControl6
             // 
-            this.labelControl6.Location = new System.Drawing.Point(229, 92);
+            this.labelControl6.Location = new System.Drawing.Point(229, 104);
             this.labelControl6.Name = "labelControl6";
             this.labelControl6.Size = new System.Drawing.Size(52, 13);
             this.labelControl6.TabIndex = 8;
             this.labelControl6.Text = "مكان الحفظ";
-            // 
-            // txt_databasename
-            // 
-            this.txt_databasename.Location = new System.Drawing.Point(105, 53);
-            this.txt_databasename.Name = "txt_databasename";
-            this.txt_databasename.Size = new System.Drawing.Size(116, 20);
-            this.txt_databasename.TabIndex = 7;
             // 
             // radioBtn_openolddatabase
             // 
@@ -259,11 +281,11 @@
             // 
             // labelControl5
             // 
-            this.labelControl5.Location = new System.Drawing.Point(227, 59);
+            this.labelControl5.Location = new System.Drawing.Point(227, 55);
             this.labelControl5.Name = "labelControl5";
-            this.labelControl5.Size = new System.Drawing.Size(86, 13);
+            this.labelControl5.Size = new System.Drawing.Size(65, 13);
             this.labelControl5.TabIndex = 6;
-            this.labelControl5.Text = "اسم قاعدة البيانات";
+            this.labelControl5.Text = "اسم السيرفر ";
             // 
             // radioBtn_creatnewdatabase
             // 
@@ -293,7 +315,6 @@
             this.attach_btn.Size = new System.Drawing.Size(75, 23);
             this.attach_btn.TabIndex = 9;
             this.attach_btn.Text = "ربط";
-            this.attach_btn.Click += new System.EventHandler(this.attach_btn_Click);
             // 
             // Connection
             // 
@@ -322,8 +343,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.groupControl3)).EndInit();
             this.groupControl3.ResumeLayout(false);
             this.groupControl3.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.txt_newDataName.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.comb_server_local.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txt_cr.Properties)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txt_databasename.Properties)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -347,12 +369,14 @@
         private DevExpress.XtraEditors.GroupControl groupControl3;
         private DevExpress.XtraEditors.TextEdit txt_cr;
         private DevExpress.XtraEditors.LabelControl labelControl6;
-        private DevExpress.XtraEditors.TextEdit txt_databasename;
         private System.Windows.Forms.RadioButton radioBtn_openolddatabase;
         private DevExpress.XtraEditors.LabelControl labelControl5;
         private System.Windows.Forms.RadioButton radioBtn_creatnewdatabase;
         private DevExpress.XtraEditors.SimpleButton Creat_btn;
         private DevExpress.XtraEditors.SimpleButton Browse_btn;
         private DevExpress.XtraEditors.SimpleButton attach_btn;
+        private DevExpress.XtraEditors.TextEdit txt_newDataName;
+        private DevExpress.XtraEditors.LabelControl labelControl7;
+        private DevExpress.XtraEditors.ComboBoxEdit comb_server_local;
     }
 }

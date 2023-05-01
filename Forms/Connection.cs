@@ -1,4 +1,5 @@
-﻿using Acco.Model;
+﻿using Acco.Migrations;
+using Acco.Model;
 using DevExpress.XtraEditors;
 using Microsoft.Win32;
 using System;
@@ -7,23 +8,29 @@ using System.ComponentModel;
 using System.Configuration;
 using System.Data;
 using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
+using System.Data.Entity.Migrations;
 using System.Data.SqlClient;
 using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using System.Security.AccessControl;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Acco.Forms
 {
     public partial class Connection : DevExpress.XtraEditors.XtraForm
     {
-      public  string databaseFilePath ;
+      public string databaseFilePath ;
       public string databaseName;
-            //<add name = "Model1" connectionString="Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\data2023.mdf;Integrated Security=True;Connect Timeout=30;MultipleActiveResultSets=True" providerName="System.Data.SqlClient" />
+      private string localServerName;
+
+        //<add name = "Model1" connectionString="Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\data2023.mdf;Integrated Security=True;Connect Timeout=30;MultipleActiveResultSets=True" providerName="System.Data.SqlClient" />
 
         public Connection()
         {
@@ -73,46 +80,31 @@ namespace Acco.Forms
 
         }
 
-        //private bool DatabaseExists(string databaseName)
-        //{
-        //    string connectionString = $"Data Source=(LocalDB)\\MSSQLLocalDB;Initial Catalog=master;Integrated Security=True;Connect Timeout=30;";
-        //    using (SqlConnection connection = new SqlConnection(connectionString))
-        //    {
-        //        try
-        //        {
-        //            connection.Open();
-        //            string query = $"SELECT COUNT(*) FROM sys.databases WHERE name = '{databaseName}'";
-        //            SqlCommand command = new SqlCommand(query, connection);
-        //            int count = (int)command.ExecuteScalar();
-        //            return count > 0;
-        //        }
-        //        catch (SqlException ex)
-        //        {
-        //            // handle the exception here
-        //            MessageBox.Show($"An error occurred while checking for the existence of the database: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-        //            return false;
-        //        }
-        //    }
-        //}
 
         private void Browse_btn_Click(object sender, EventArgs e)
         {
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
-            saveFileDialog.Filter = "SQL Server Database (*.mdf)|*.mdf";
-            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
+            if (folderBrowserDialog.ShowDialog() == DialogResult.OK)
             {
-                txt_cr.Text = saveFileDialog.FileName;
+                string selectedPath = folderBrowserDialog.SelectedPath;
+                // قم بتنفيذ الإجراء الذي ترغب فيه باستخدام المسار المحدد
+                // على سبيل المثال، تحديث النص في TextBox
+                txt_cr.Text = selectedPath;
             }
+
         }
 
         private void Creat_btn_Click(object sender, EventArgs e)
         {
             // Get database file path and name
-             databaseFilePath = txt_cr.Text;
-             databaseName = Path.GetFileNameWithoutExtension(databaseFilePath);
+            databaseFilePath = txt_cr.Text;
+            databaseName = txt_newDataName.Text;
+            localServerName = comb_server_local.Text;
+
+            string databaseFullPath = Path.Combine(databaseFilePath, databaseName);
 
             // Create connection string with SQL Server authentication
-            string connectionString = $"Data Source=(LocalDB)\\MSSQLLocalDB;Initial Catalog={databaseName}";
+            string connectionString = $"Data Source={localServerName};Initial Catalog=master;Integrated Security=True";
 
             // Create the new database
             using (SqlConnection connection = new SqlConnection(connectionString))
@@ -131,145 +123,187 @@ namespace Acco.Forms
                 }
 
                 // Create the new database
-                string createDatabaseQuery = $"CREATE DATABASE [{databaseName}] ON PRIMARY (NAME = {databaseName}, FILENAME = '{databaseFilePath}')";
+                string createDatabaseQuery = $"CREATE DATABASE [{databaseName}] ON PRIMARY (NAME = '{databaseName}', FILENAME = '{databaseFullPath}')";
                 SqlCommand createCommand = new SqlCommand(createDatabaseQuery, connection);
                 createCommand.ExecuteNonQuery();
+            }
+
+            // Create the database file
+            string databaseContent = $"{localServerName}\r\n{databaseName}";
+            File.WriteAllText("datasa.txt", databaseContent);
+
+            var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+             connectionString = config.ConnectionStrings.ConnectionStrings["Model1"].ConnectionString;
+
+            var builder = new SqlConnectionStringBuilder(connectionString);
+            builder.DataSource = localServerName;
+            builder.InitialCatalog = databaseName;
+
+            config.ConnectionStrings.ConnectionStrings["Model1"].ConnectionString = builder.ConnectionString;
+            config.Save(ConfigurationSaveMode.Modified);
+            ConfigurationManager.RefreshSection("connectionStrings");
+
+
+
+            // تنفيذ الـ migrations
+            using (var dbContext = new Model1())
+            {
+                // إضافة migration جديدة
+                dbContext.Database.Initialize(false);
+                var migrator = new DbMigrator(new Migrations.Configuration());
+                migrator.Configuration.TargetDatabase = new DbConnectionInfo(connectionString, "System.Data.SqlClient");
+                migrator.Configuration.CommandTimeout = 600;
+                migrator.Update();
             }
 
             MessageBox.Show($"Database created successfully.", "Database created", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
-        private void attach_btn_Click(object sender, EventArgs e)
-        {
-            string databaseFilePath = txt_cr.Text;
-            string databaseName = Path.GetFileNameWithoutExtension(databaseFilePath);
-            string connectionString = $"Data Source=(LocalDB)\\MSSQLLocalDB;Integrated Security=True;Connect Timeout=30;";
+        //    private void Creat_btn_Click(object sender, EventArgs e)
+        //    {
+        //        // Get database file path and name
+        //        string databaseName = txt_newDataName.Text;
+        //        string localServerName = comb_server_local.Text;
 
-            SqlConnection connection = new SqlConnection(connectionString);
-            try
-            {
-                connection.Open();
+        //        // Generate random database file name
+        //        string databaseFileName = $"{databaseName}_{Guid.NewGuid().ToString()}.mdf";
 
-                // Attach the database
-                string attachDatabaseQuery = $"CREATE DATABASE [{databaseName}] ON (FILENAME = '{databaseFilePath}') FOR ATTACH";
-                SqlCommand attachCommand = new SqlCommand(attachDatabaseQuery, connection);
-                attachCommand.ExecuteNonQuery();
+        //        // Specify the database file path
+        //        string databaseFilePath = Path.Combine(@"D:\C Sharp App\old data\New folder", databaseFileName);
 
-                MessageBox.Show($"Database attached successfully.", "Database attached", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error attaching database: {ex.Message}", "Database attachment failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            finally
-            {
-                connection.Close();
-            }
-        }
+        //        // Create connection string with SQL Server authentication
+        //        string connectionString = $"Data Source={localServerName};Initial Catalog=master;Integrated Security=True";
+
+        //        // Create the new database
+        //        using (var context = new Model1(connectionString))
+        //        {
+        //            // Check if the database already exists
+        //            bool databaseExists = context.Database.SqlQuery<int>($"SELECT COUNT(*) FROM sys.databases WHERE name = '{databaseName}'").SingleOrDefault() > 0;
+
+        //            if (!databaseExists)
+        //            {
+        //                // Create the new database
+        //                context.Database.Create();
+
+        //                // Enable Code First Migrations
+        //                var configuration = new DbMigrationsConfiguration<Model1>
+        //                {
+        //                    AutomaticMigrationsEnabled = true,
+        //                    AutomaticMigrationDataLossAllowed = true
+        //                };
+        //                var migrator = new DbMigrator(configuration);
+        //                migrator.Update();
+        //            }
+        //            else
+        //            {
+        //                MessageBox.Show($"Database '{databaseName}' already exists.", "Database creation failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        //                return;
+        //            }
+        //        }
+
+        //        // Create the database file
+        //        string databaseContent = $"{localServerName}\r\n{databaseName}";
+        //        string filePath = Path.Combine(Application.StartupPath, "datasa.txt");
+
+        //        if (File.Exists(filePath))
+        //        {
+        //            // Delete the existing file
+        //            File.Delete(filePath);
+        //        }
+
+        //        // Write the database content to the file
+        //        File.WriteAllText(filePath, databaseContent);
+
+        //        // Update connection string in App.config
+        //        string appConfigPath = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
+        //        var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+        //        var connectionStringsSection = config.ConnectionStrings;
+
+        //        // Get the current connection string
+        //        string currentConnectionString = connectionStringsSection.ConnectionStrings["MyDbContext"].ConnectionString;
+
+        //        // Replace the server and database names in the connection string
+        //        string updatedConnectionString = currentConnectionString.Replace($"Server={localServerName};", $"Server={localServerName};");
+        //        updatedConnectionString = updatedConnectionString.Replace($"Database=MyDatabase;", $"Database={databaseName};");
+
+        //        // Update the connection string
+        //        connectionStringsSection.ConnectionStrings["MyDbContext"].ConnectionString = updatedConnectionString;
+        //        config.Save(ConfigurationSaveMode.Modified);
+
+        //        // Refresh the application configuration
+        //        ConfigurationManager.RefreshSection("MyDbContext");
+        //        MessageBox.Show($"Database created successfully and connection string updated.", "Database created", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+        //}
 
 
 
         //private void Creat_btn_Click(object sender, EventArgs e)
         //{
-        //    string databaseFilePath = txt_cr.Text;
-        //    string databaseName = Path.GetFileNameWithoutExtension(databaseFilePath);
+        //    // Get database file path and name
+        //    databaseName = txt_newDataName.Text;
+        //    localServerName = comb_server_local.Text;
 
-        //    using (SqlConnection connection = new SqlConnection("Data Source=(LocalDB)\\MSSQLLocalDB;Initial Catalog=master;Integrated Security=True"))
+        //    // Generate random database file name
+        //    string databaseFileName = $"{databaseName}_{Guid.NewGuid().ToString()}.mdf";
+
+        //    // Specify the database file path
+        //    databaseFilePath = Path.Combine(@"D:\C Sharp App\old data\New folder", databaseFileName);
+
+        //    // Create connection string with SQL Server authentication
+        //    string connectionString = $"Data Source={localServerName};Initial Catalog=master;Integrated Security=True";
+
+        //    // Create the new database
+        //    using (SqlConnection connection = new SqlConnection(connectionString))
         //    {
         //        connection.Open();
 
-        //        // Create the database
-        //        string createDatabaseQuery = $"CREATE DATABASE [{databaseName}] ON PRIMARY (NAME = {databaseName}_data, FILENAME = '{databaseFilePath}') LOG ON (NAME = {databaseName}_log, FILENAME = '{Path.GetDirectoryName(databaseFilePath)}\\{databaseName}_log.ldf')";
-        //        SqlCommand command = new SqlCommand(createDatabaseQuery, connection);
-        //        command.ExecuteNonQuery();
+        //        // Check if the database already exists
+        //        string checkDatabaseQuery = $"SELECT COUNT(*) FROM sys.databases WHERE name = '{databaseName}'";
+        //        SqlCommand checkCommand = new SqlCommand(checkDatabaseQuery, connection);
+        //        int databaseCount = (int)checkCommand.ExecuteScalar();
 
-        //        // Update the connection string for the new database
-        //        string newConnectionString = $"Data Source=(LocalDB)\\MSSQLLocalDB;Initial Catalog={databaseName};Integrated Security=True;Connect Timeout=30;";
-        //        var configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-        //        var connectionStringSection = (ConnectionStringsSection)configuration.GetSection("connectionStrings");
-        //        var connectionString = connectionStringSection.ConnectionStrings["Model1"].ConnectionString;
-        //        connectionStringSection.ConnectionStrings["Model1"].ConnectionString = newConnectionString;
-        //        configuration.Save(ConfigurationSaveMode.Modified);
-        //        ConfigurationManager.RefreshSection("connectionStrings");
+        //        if (databaseCount > 0)
+        //        {
+        //            MessageBox.Show($"Database '{databaseName}' already exists.", "Database creation failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        //            return;
+        //        }
 
-        //        MessageBox.Show($"Database created and connected successfully.", "Database created and connected", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        //        // Create the new database
+        //        string createDatabaseQuery = $"CREATE DATABASE [{databaseName}] ON PRIMARY (NAME = '{databaseName}', FILENAME = '{databaseFilePath}')";
+        //        SqlCommand createCommand = new SqlCommand(createDatabaseQuery, connection);
+        //        createCommand.ExecuteNonQuery();
         //    }
+
+        //    // Create the database file
+        //    string databaseContent = $"{localServerName}\r\n{databaseName}";
+        //    File.WriteAllText("datasa.txt", databaseContent);
+
+        //    // Update connection string in App.config
+        //    string appConfigPath = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
+        //    var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+        //    var connectionStringsSection = config.ConnectionStrings;
+
+        //    // Get the current connection string
+        //    string currentConnectionString = connectionStringsSection.ConnectionStrings["Model1"].ConnectionString;
+
+        //    // Parse the current connection string to extract the server and database names
+        //    var builder = new SqlConnectionStringBuilder(currentConnectionString);
+        //    string oldServerName = builder.DataSource;
+        //    string oldDatabaseName = builder.InitialCatalog;
+
+        //    // Replace the server and database names in the connection string
+        //    string updatedConnectionString = currentConnectionString.Replace($"Server={oldServerName};", $"Server={localServerName};");
+        //    updatedConnectionString = updatedConnectionString.Replace($"Database={oldDatabaseName};", $"Database={databaseName};");
+
+        //    // Update the connection string
+        //    connectionStringsSection.ConnectionStrings["Model1"].ConnectionString = updatedConnectionString;
+        //    config.Save(ConfigurationSaveMode.Modified);
+
+        //    // Refresh the application configuration
+        //    ConfigurationManager.RefreshSection("Model1");
+        //    MessageBox.Show($"Database created successfully and connection string updated.", "Database created", MessageBoxButtons.OK, MessageBoxIcon.Information);
         //}
-
-
-
-        //private void Creat_btn_Click(object sender, EventArgs e)
-        //{
-        //    using (var db = new Model1())
-        //    {
-        //        // close the current database connection
-        //        db.Database.Connection.Close();
-
-        //        // get the database name from the text box
-        //        string databaseName = txt_databasename.Text.Trim();
-
-        //        // validate the database name
-        //        if (string.IsNullOrEmpty(databaseName))
-        //        {
-        //            MessageBox.Show("Please enter a valid database name", "Invalid input", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-        //            return;
-        //        }
-
-        //        // select a file to save the database
-        //        var saveFileDialog = new SaveFileDialog();
-        //        saveFileDialog.Filter = "Database files (*.mdf)|*.mdf";
-        //        saveFileDialog.RestoreDirectory = true;
-        //        saveFileDialog.FileName = $"{databaseName}.mdf";
-        //        if (saveFileDialog.ShowDialog() != DialogResult.OK)
-        //        {
-        //            return;
-        //        }
-
-        //        // specify the database path
-        //        string databasePath = Path.GetDirectoryName(saveFileDialog.FileName);
-        //        string databaseFile = Path.Combine(databasePath, $"{databaseName}_{Guid.NewGuid()}.mdf");
-
-        //        // check if a database with the same name already exists
-        //        if (DatabaseExists(databaseName))
-        //        {
-        //            MessageBox.Show($"Database with name {databaseName} already exists, please choose a different name", "Database already exists", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-        //            return;
-        //        }
-
-        //        // grant modify permission to the current user for the folder containing the database file
-        //        string folderPath = Path.GetDirectoryName(saveFileDialog.FileName);
-        //        DirectoryInfo folder = new DirectoryInfo(folderPath);
-        //        DirectorySecurity folderSecurity = folder.GetAccessControl();
-        //        string user = Environment.UserDomainName + "\\" + Environment.UserName;
-        //        folderSecurity.AddAccessRule(new FileSystemAccessRule(user, FileSystemRights.Modify, InheritanceFlags.ContainerInherit | InheritanceFlags.ObjectInherit, PropagationFlags.InheritOnly, AccessControlType.Allow));
-        //        folder.SetAccessControl(folderSecurity);
-
-        //        // create the new database
-        //        string connectionString = $"Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename={databaseFile};Initial Catalog={databaseName};Integrated Security=True";
-        //        using (SqlConnection connection = new SqlConnection(connectionString))
-        //        {
-        //            connection.Open();
-
-        //            // create the database
-        //            string createDatabaseQuery = $"CREATE DATABASE {databaseName} ON PRIMARY (NAME={databaseName}_data, FILENAME='{databaseFile}') LOG ON (NAME={databaseName}_log, FILENAME='{databasePath}\\{databaseName}_log.ldf')";
-        //            SqlCommand command = new SqlCommand(createDatabaseQuery, connection);
-        //            command.ExecuteNonQuery();
-
-
-        //        }
-
-        //        // open the new database connection
-        //        db.Database.Connection.ConnectionString = $"Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename={databaseFile};Initial Catalog={databaseName};Integrated Security=True";
-        //        db.Database.Connection.Open();
-
-        //        // close the database connection
-        //        db.Database.Connection.Close();
-
-        //        // display the path of the new database file
-        //        MessageBox.Show($"Database created successfully. Database file path: {databaseFile}", "Database created", MessageBoxButtons.OK, MessageBoxIcon.Information);
-        //    }
-        //}
-        //تحقق من وجود قاعدة بيانات بنفس الاسم
         private void radioBtn_creatnewdatabase_CheckedChanged(object sender, EventArgs e)
         {
             if (radioBtn_creatnewdatabase.Checked)
@@ -279,8 +313,18 @@ namespace Acco.Forms
                 groupControl2.Enabled = false;
 
             }
-        }
+            // استدعاء دالة تجلب اسم السيرفر المحلي
+            string localServerName = GetLocalServerName();
 
+            // تحديث قيمة الكومبوبوكس بالاسم المحلي للسيرفر
+            comb_server_local.Text = localServerName;
+        }
+        private string GetLocalServerName()
+        {
+            // دالة لجلب اسم السيرفر المحلي
+
+            return System.Environment.MachineName;
+        }
         private void radioBtn_openolddatabase_CheckedChanged(object sender, EventArgs e)
         {
             groupControl1.Enabled = true;
@@ -336,7 +380,6 @@ namespace Acco.Forms
             //    MessageBox.Show($"Error getting databases for server {selectedServer}: {ex.Message}");
             //}
         }
-
         private void localAuthRadioButton_CheckedChanged(object sender, EventArgs e)
         {
             if (localAuthRadioButton.Checked)
@@ -344,7 +387,6 @@ namespace Acco.Forms
                 networkAuthRadioButton.Checked = false;
             }
         }
-
         private void networkAuthRadioButton_CheckedChanged(object sender, EventArgs e)
         {
             if (networkAuthRadioButton.Checked)
@@ -352,8 +394,6 @@ namespace Acco.Forms
                 localAuthRadioButton.Checked = false;
             }
         }
-
-
         private void connectButton_Click_1(object sender, EventArgs e)
         {
             var server = serverComboBox.Text;
@@ -379,51 +419,11 @@ namespace Acco.Forms
                 MessageBox.Show("Error connecting to database: " + ex.Message);
             }
         }
-
         private void simpleButton2_Click(object sender, EventArgs e)
         {
            this. Close();
         }
 
 
-
-
-
-
-
-        //private void serverComboBox_SelectedValueChanged(object sender, EventArgs e)
-        //{
-        //    databaseComboBox.Items.Clear();
-
-        //    string selectedServer = serverComboBox.Text;
-
-        //    if (selectedServer == ".")
-        //    {
-        //        selectedServer = Environment.MachineName;
-        //    }
-
-        //    var connectionString = $"Data Source={selectedServer};Integrated Security=True;";
-
-        //    try
-        //    {
-        //        using (var connection = new SqlConnection(connectionString))
-        //        {
-        //            connection.Open();
-
-        //            DataTable databasesSchemaTable = connection.GetSchema("Databases");
-
-        //            foreach (DataRow row in databasesSchemaTable.Rows)
-        //            {
-        //                string databaseName = row.Field<string>("database_name");
-
-        //                databaseComboBox.Items.Add(databaseName);
-        //            }
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        MessageBox.Show($"Error getting databases for server {selectedServer}: {ex.Message}");
-        //    }
-        //}
     }
 }

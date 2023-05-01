@@ -15,6 +15,8 @@ namespace Acco
         [STAThread]
         static void Main()
         {
+            Startup.Initialize();
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Model1 model = new Model1();
