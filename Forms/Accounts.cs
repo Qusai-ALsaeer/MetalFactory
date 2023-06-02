@@ -314,7 +314,8 @@ namespace Acco.Forms
                         AccoED.ac_fnum = Convert.ToInt32(txt_fnum.EditValue);
                         AccoED.ac_name = Convert.ToString(txt_name.EditValue);
                         AccoED.ac_num = Convert.ToInt32(txt_ac_num.EditValue);
-                        AccoED.ac_final = Convert.ToInt32(lkp_final.EditValue);
+                        //AccoED.ac_final = Convert.ToInt32(lkp_final.EditValue);
+                        AccoED.ac_final = lkp_final.EditValue != DBNull.Value ? Convert.ToInt32(lkp_final.EditValue) : 1 ;
                         AccoED.ac_cu = Convert.ToInt32(lkp_cur.EditValue);
                         dbContext.tb_account.AddOrUpdate(AccoED);
                         dbContext.SaveChanges();

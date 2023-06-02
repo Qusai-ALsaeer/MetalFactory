@@ -3,7 +3,7 @@
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class faranAccount : DbMigration
+    public partial class InitialCreate : DbMigration
     {
         public override void Up()
         {
@@ -149,9 +149,11 @@
                         credit = c.Double(),
                         debit = c.Double(),
                         id_cur = c.Int(),
-                        mo_num = c.Int(nullable: false),
-                        ser_num = c.String(maxLength: 10),
-                        account = c.Int(),
+                        mother_num = c.Int(),
+                        motion_num = c.Int(),
+                        gen_num = c.Int(),
+                        account_credit = c.Int(),
+                        account_debit = c.Int(),
                         explan = c.String(maxLength: 100),
                         past_date = c.String(maxLength: 50),
                         g_check = c.Boolean(),

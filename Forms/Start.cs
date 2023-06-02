@@ -29,7 +29,7 @@ namespace Acco.Model
             pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
 
             S_Label_date.Text = "    " + DateTime.Now.ToString("yyyy-MM-dd") + "    |    " + DateTime.Now.ToString("hh:mm:ss") + "    |    " + DateTime.Now.ToString("MMMM") + "  -  " + DateTime.Now.ToString("dddd ");
-            S_Label_prog.Text = "                          ||                                 " + "برنامج الساير لمحاسبة معامل الحديد";
+            S_Label_prog.Text =      Properties.Settings.Default.databaseName+ "                          ||                                 " + "برنامج الساير لمحاسبة معامل الحديد";
 
         }
         private void SM_close_Click(object sender, EventArgs e)

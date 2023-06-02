@@ -24,7 +24,8 @@ namespace Acco.Model
         public int? motion_num { get; set; }
         public int? gen_num { get; set; }
 
-        public int? account { get; set; }
+        public int? account_credit { get; set; }
+        public int? account_debit { get; set; }
 
         [StringLength(100)]
         public string explan { get; set; }

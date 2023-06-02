@@ -21,6 +21,8 @@ namespace Acco.Forms
 
         tb_payment PaymentData;
         tb_general generalData;
+        tb_account CreditAcountData;
+        tb_account DebitAcountData;
 
         private BindingSource tb_accountBindingSource_Credit = new BindingSource();
         private BindingSource tb_accountBindingSource_Debit = new BindingSource();
@@ -63,7 +65,6 @@ namespace Acco.Forms
                 lkp_pay_debit.Properties.DataSource = tb_accountBindingSource_Debit;
             }
         }
-
         private void Payment_Load(object sender, EventArgs e)
         {
             RefreshData();
@@ -197,12 +198,13 @@ namespace Acco.Forms
 
                             dbContext.tb_payment.AddOrUpdate(PaymentData);
 
+                            // add general credit
 
 
-                            //dbContext.SaveChanges();
-                            //XtraMessageBox.Show("تم الحفظ بنجاح!", "حفظ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                            //RefreshData();
-                            //tb_paymentBindingSource.DataSource = PaymentData;
+                            dbContext.SaveChanges();
+                            XtraMessageBox.Show("تم الحفظ بنجاح!", "حفظ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            RefreshData();
+                            tb_paymentBindingSource.DataSource = PaymentData;
 
 
                         }
@@ -219,7 +221,6 @@ namespace Acco.Forms
                             PayED.pay_exch = Convert.ToInt32(spn_pay_exch.EditValue);
                             PayED.explan = txt_pay_explan.EditValue.ToString();
                             PayED.note = txt_pay_note.EditValue.ToString();
-
 
                             dbContext.tb_payment.AddOrUpdate(PayED);
                             dbContext.SaveChanges();
@@ -243,13 +244,10 @@ namespace Acco.Forms
             }
 
         }
-
-
         private void D_btn_Click(object sender, EventArgs e)
         {
 
         }
-
         private void C_btn_Click(object sender, EventArgs e)
         {
             this.Close();

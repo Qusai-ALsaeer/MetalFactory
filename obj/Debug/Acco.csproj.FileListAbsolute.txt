@@ -54,11 +54,10 @@ D:\C Sharp App\Metal\Acco\obj\Debug\Acco.Forms.Catgory.resources
 D:\C Sharp App\Metal\Acco\obj\Debug\Acco.Forms.Jop.resources
 D:\C Sharp App\Metal\Acco\obj\Debug\Acco.Forms.Unit.resources
 D:\C Sharp App\Metal\Acco\obj\Debug\Acco.Forms.Item.resources
-D:\C Sharp App\Metal\Acco\obj\Debug\Acco.Migrations.faranAccount.resources
 D:\C Sharp App\Metal\Acco\obj\Debug\Acco.Forms.Faran.resources
 D:\C Sharp App\Metal\Acco\obj\Debug\Acco.Forms.Connection.resources
 D:\C Sharp App\Metal\Acco\obj\Debug\Acco.Forms.Motion.resources
 D:\C Sharp App\Metal\Acco\obj\Debug\Acco.Forms.Payment.resources
 D:\C Sharp App\Metal\Acco\bin\Debug\DevExpress.Xpo.v22.2.dll
 D:\C Sharp App\Metal\Acco\bin\Debug\DevExpress.Xpo.v22.2.xml
-D:\C Sharp App\Metal\Acco\obj\Debug\Acco.Migrations.InitialUpdate.resources
+D:\C Sharp App\Metal\Acco\obj\Debug\Acco.Migrations.InitialCreate.resources

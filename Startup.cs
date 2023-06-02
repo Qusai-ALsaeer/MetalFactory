@@ -12,6 +12,7 @@ namespace Acco
 {
     internal class Startup
     {
+        // to change conectionstring at using txt fill in project folder
         public static void Initialize()
         {
             string databaseFilePath = "datasa.txt";

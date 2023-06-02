@@ -15,6 +15,7 @@ namespace Acco
         [STAThread]
         static void Main()
         {
+            // for connect to database at txt fill            
             Startup.Initialize();
 
             Application.EnableVisualStyles();
